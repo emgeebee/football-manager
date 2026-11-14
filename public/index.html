@@ -41,11 +41,17 @@
               Setup
             </button>
           </nav>
+          <button type="button" class="btn btn-secondary" id="btn-share" hidden>Share</button>
           <div class="user-chip" id="user-chip" hidden>
             <img id="user-pic" alt="" width="28" height="28" />
             <span id="user-name"></span>
             <button type="button" class="btn-link" id="btn-sign-out">Sign out</button>
           </div>
+        </div>
+
+        <div class="share-banner" id="share-banner" hidden>
+          <span id="share-banner-text">Viewing a shared team</span>
+          <button type="button" class="btn-link" id="btn-leave-share">Open my team</button>
         </div>
 
         <div class="matchday-bar" id="matchday-bar">
@@ -81,6 +87,28 @@
       <p id="status" class="status" hidden></p>
       <p id="toast" class="toast" hidden></p>
     </div>
+
+    <div id="share-modal" class="modal" hidden>
+      <div class="modal__backdrop" data-share-close></div>
+      <div class="modal__panel" role="dialog" aria-modal="true" aria-labelledby="share-modal-title">
+        <header class="modal__head">
+          <h2 id="share-modal-title">Share team</h2>
+          <button type="button" class="modal__close" data-share-close aria-label="Close">×</button>
+        </header>
+        <p class="modal__text share-modal__intro">
+          Anyone with a link can view this team after signing in with Google. People who have
+          opened it can be allowed to edit. Revoke a link to stop it working.
+        </p>
+        <p id="share-modal-error" class="share-modal__error" hidden></p>
+        <div class="share-modal__actions">
+          <button type="button" class="btn btn-secondary" id="share-create">Create share link</button>
+        </div>
+        <div id="share-modal-body" class="share-modal__body">
+          <p class="share-modal__muted">Loading share links…</p>
+        </div>
+      </div>
+    </div>
+
     <script src="./app.js" type="module"></script>
   </body>
 </html>

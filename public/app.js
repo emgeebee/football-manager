@@ -1,8 +1,23 @@
 import { initAuth, onAuthChange, getSession, signOut } from "./auth.js";
-import { loadSeasonDoc, saveSeasonDoc, fetchSeedSeason } from "./api.js";
+import {
+  loadSeasonDoc,
+  saveSeasonDoc,
+  fetchSeedSeason,
+  listShares,
+  createShare,
+  revokeShare,
+  setShareAccess,
+  loadSharedSeason,
+  saveSharedSeason,
+} from "./api.js";
 
 const POSITIONS = ["GK", "RB", "LB", "RF", "LF"];
 const OUTFIELD = ["RB", "LB", "RF", "LF"];
+const SHARE_PARAM = "share";
+const shareDateFormat = new Intl.DateTimeFormat(undefined, {
+  dateStyle: "medium",
+  timeStyle: "short",
+});
 
 /** @type {any} */
 let season = null;
@@ -10,6 +25,11 @@ let currentMatchId = null;
 let dirty = false;
 let saveTimer = null;
 let appStarted = false;
+/** @type {{ code: string, permission: "read" | "write" } | null} */
+let sharedSession = null;
+/** @type {any[] | null} */
+let shareLinks = null;
+let shareUpdatingKey = null;
 
 const els = {
   authGate: document.getElementById("auth-gate"),
@@ -20,6 +40,14 @@ const els = {
   userPic: document.getElementById("user-pic"),
   userName: document.getElementById("user-name"),
   btnSignOut: document.getElementById("btn-sign-out"),
+  btnShare: document.getElementById("btn-share"),
+  shareBanner: document.getElementById("share-banner"),
+  shareBannerText: document.getElementById("share-banner-text"),
+  btnLeaveShare: document.getElementById("btn-leave-share"),
+  shareModal: document.getElementById("share-modal"),
+  shareModalBody: document.getElementById("share-modal-body"),
+  shareModalError: document.getElementById("share-modal-error"),
+  shareCreate: document.getElementById("share-create"),
   teamName: document.getElementById("team-name"),
   tagline: document.getElementById("tagline"),
   matchSelect: document.getElementById("match-select"),
@@ -267,7 +295,45 @@ function getMatch(id) {
   return season.matches.find((m) => m.id === id);
 }
 
+function readShareCode() {
+  return new URLSearchParams(window.location.search).get(SHARE_PARAM);
+}
+
+function shareUrl(code) {
+  const url = new URL(window.location.href);
+  url.search = "";
+  url.hash = "";
+  url.searchParams.set(SHARE_PARAM, code);
+  return url.toString();
+}
+
+function isSharedView() {
+  return !!sharedSession;
+}
+
+function canEdit() {
+  if (!sharedSession) return true;
+  return sharedSession.permission === "write";
+}
+
+function updateShareChrome() {
+  const shared = isSharedView();
+  if (els.btnShare) els.btnShare.hidden = shared || !season;
+  if (els.shareBanner) els.shareBanner.hidden = !shared;
+  if (els.shareBannerText && shared) {
+    els.shareBannerText.textContent =
+      sharedSession.permission === "write"
+        ? "Viewing a shared team · You can edit"
+        : "Viewing a shared team · View only";
+  }
+  if (els.btnNewMatch) els.btnNewMatch.hidden = !canEdit();
+  const editTab = document.querySelector('.mode[data-mode="edit"]');
+  if (editTab) editTab.hidden = !canEdit();
+  document.body.classList.toggle("read-only", !canEdit());
+}
+
 function markDirty() {
+  if (!canEdit()) return;
   dirty = true;
   scheduleSave();
 }
@@ -280,9 +346,14 @@ function scheduleSave() {
 async function saveSeason() {
   if (!season || !dirty) return;
   if (!getSession()) return;
+  if (!canEdit()) {
+    dirty = false;
+    return;
+  }
   season.quarterMinutes = getQuarterMinutes();
   try {
-    await saveSeasonDoc(season);
+    if (sharedSession) await saveSharedSeason(sharedSession.code, season);
+    else await saveSeasonDoc(season);
     dirty = false;
     clearError();
     showToast("Saved");
@@ -1008,47 +1079,56 @@ function removePlayerEverywhere(name) {
 
 function renderSetup() {
   const players = season.players || [];
+  const editable = canEdit();
   const rows = players
     .map(
       (name, i) => `
       <li class="squad-row" data-index="${i}">
-        <input type="text" class="squad-name" value="${escapeHtml(name)}" aria-label="Player ${i + 1}" />
-        <button type="button" class="btn-link squad-remove" data-index="${i}" ${players.length <= 5 ? "disabled" : ""}>Remove</button>
+        <input type="text" class="squad-name" value="${escapeHtml(name)}" aria-label="Player ${i + 1}" ${editable ? "" : "disabled"} />
+        ${
+          editable
+            ? `<button type="button" class="btn-link squad-remove" data-index="${i}" ${players.length <= 5 ? "disabled" : ""}>Remove</button>`
+            : ""
+        }
       </li>`
     )
     .join("");
 
-  const firstTime = !season.setupComplete;
+  const firstTime = !season.setupComplete && !isSharedView();
   els.viewSetup.innerHTML = `
     <div class="setup-head">
       <h1>${firstTime ? "Welcome — set up your team" : "Team setup"}</h1>
-      <p>You can change these anytime from Setup.</p>
+      <p>${editable ? "You can change these anytime from Setup." : "View only — ask the owner for edit access."}</p>
     </div>
     <div class="panel setup-panel">
       <label class="setup-field">Team name
-        <input type="text" id="setup-team-name" value="${escapeHtml(season.teamName || "")}" placeholder="e.g. Writtle Minors Red" />
+        <input type="text" id="setup-team-name" value="${escapeHtml(season.teamName || "")}" placeholder="e.g. Writtle Minors Red" ${editable ? "" : "disabled"} />
       </label>
       <label class="setup-field">Minutes per quarter
-        <input type="number" id="setup-quarter-mins" min="1" max="30" step="1" value="${getQuarterMinutes()}" />
+        <input type="number" id="setup-quarter-mins" min="1" max="30" step="1" value="${getQuarterMinutes()}" ${editable ? "" : "disabled"} />
         <span class="setup-hint">Full game = 4 × this (${gameMinutes()} mins with current setting)</span>
       </label>
       <div class="setup-squad">
         <div class="setup-squad-head">
           <h2>Squad</h2>
-          <button type="button" class="btn btn-secondary" id="setup-add-player">Add player</button>
+          ${editable ? `<button type="button" class="btn btn-secondary" id="setup-add-player">Add player</button>` : ""}
         </div>
-        <p class="edit-hint">At least 5 players. Renaming updates past match sheets.</p>
+        ${editable ? `<p class="edit-hint">At least 5 players. Renaming updates past match sheets.</p>` : ""}
         <ol class="squad-list">${rows}</ol>
       </div>
-      <div class="setup-actions">
+      ${
+        editable
+          ? `<div class="setup-actions">
         <button type="button" class="btn btn-secondary" id="setup-done">
           ${firstTime ? "Save & continue" : "Done"}
         </button>
-      </div>
+      </div>`
+          : ""
+      }
     </div>
   `;
 
-  wireSetupHandlers();
+  if (editable) wireSetupHandlers();
 }
 
 function wireSetupHandlers() {
@@ -1230,6 +1310,7 @@ function setScope(next, { skipHash = false } = {}) {
 }
 
 function setMatchMode(next, { skipHash = false } = {}) {
+  if (next === "edit" && !canEdit()) next = "match";
   matchMode = next;
   els.modes.forEach((btn) => {
     const on = btn.dataset.mode === matchMode;
@@ -1254,6 +1335,7 @@ function applyViewVisibility() {
 function render() {
   if (!season) return;
   season.quarterMinutes = getQuarterMinutes();
+  updateShareChrome();
   if (els.teamName) els.teamName.textContent = season.teamName || "Matchday";
   document.title = `${season.teamName || "Matchday"} — Matchday`;
   if (scope === "setup") {
@@ -1276,6 +1358,7 @@ function render() {
 }
 
 function addNewMatch() {
+  if (!canEdit()) return;
   const match = createMatch();
   season.matches.push(match);
   currentMatchId = match.id;
@@ -1337,9 +1420,183 @@ function showSignedOut() {
   if (els.authGate) els.authGate.hidden = false;
   if (els.app) els.app.hidden = true;
   if (els.userChip) els.userChip.hidden = true;
+  if (els.btnShare) els.btnShare.hidden = true;
+  if (els.shareBanner) els.shareBanner.hidden = true;
+  closeShareModal();
   season = null;
+  sharedSession = null;
+  shareLinks = null;
   appStarted = false;
   dirty = false;
+}
+
+function setShareModalError(msg) {
+  if (!els.shareModalError) return;
+  if (!msg) {
+    els.shareModalError.hidden = true;
+    els.shareModalError.textContent = "";
+    return;
+  }
+  els.shareModalError.hidden = false;
+  els.shareModalError.textContent = msg;
+}
+
+function withSharePermission(links, code, userid, permission) {
+  return (links ?? []).map((link) => {
+    if (link.code !== code) return link;
+    return {
+      ...link,
+      accessedBy: (link.accessedBy ?? []).map((access) =>
+        access.userid === userid ? { ...access, permission } : access
+      ),
+    };
+  });
+}
+
+function renderAccessedBy(code, accesses = []) {
+  if (!accesses.length) return `<p class="share-modal__muted">Not opened by anyone yet.</p>`;
+  const sorted = [...accesses].sort((a, b) =>
+    String(b.lastAccessedAt || "").localeCompare(String(a.lastAccessedAt || ""))
+  );
+  const items = sorted
+    .map((access) => {
+      const label = access.name || access.email || "Unknown user";
+      const permission = access.permission === "write" ? "write" : "read";
+      const key = `${code}:${access.userid}`;
+      const count =
+        access.accessCount === 1 ? "Once" : `${access.accessCount || 0} times`;
+      const last = access.lastAccessedAt
+        ? shareDateFormat.format(new Date(access.lastAccessedAt))
+        : "—";
+      const email =
+        access.name && access.email
+          ? ` <span class="share-modal__muted">${escapeHtml(access.email)}</span>`
+          : "";
+      return `<li>
+        <div class="share-modal__person">
+          <span class="share-modal__viewer" title="${escapeHtml(access.email || "")}">${escapeHtml(label)}${email}</span>
+          <select class="share-modal__permission" data-code="${escapeHtml(code)}" data-userid="${escapeHtml(access.userid)}" aria-label="Permission for ${escapeHtml(label)}" ${shareUpdatingKey === key ? "disabled" : ""}>
+            <option value="read" ${permission === "read" ? "selected" : ""}>Can view</option>
+            <option value="write" ${permission === "write" ? "selected" : ""}>Can edit</option>
+          </select>
+        </div>
+        <span class="share-modal__muted">${escapeHtml(count)} · last ${escapeHtml(last)}</span>
+      </li>`;
+    })
+    .join("");
+  return `<div class="share-modal__access"><span class="share-modal__muted">Accessed by</span><ul>${items}</ul></div>`;
+}
+
+function renderShareLinks() {
+  if (!els.shareModalBody) return;
+  if (shareLinks === null) {
+    els.shareModalBody.innerHTML = `<p class="share-modal__muted">Loading share links…</p>`;
+    return;
+  }
+  if (!shareLinks.length) {
+    els.shareModalBody.innerHTML = `<p class="share-modal__muted">No share links yet.</p>`;
+    return;
+  }
+  els.shareModalBody.innerHTML = `<ul class="share-modal__list">${shareLinks
+    .map((link) => {
+      const url = shareUrl(link.code);
+      const created = link.createdAt
+        ? shareDateFormat.format(new Date(link.createdAt))
+        : "—";
+      return `<li class="share-modal__link">
+        <input readonly aria-label="Share link" value="${escapeHtml(url)}" />
+        <div class="share-modal__row">
+          <span class="share-modal__muted">Created ${escapeHtml(created)}</span>
+          <button type="button" class="btn btn-secondary share-copy" data-code="${escapeHtml(link.code)}">Copy</button>
+          <button type="button" class="btn btn-danger share-revoke" data-code="${escapeHtml(link.code)}">Revoke</button>
+        </div>
+        ${renderAccessedBy(link.code, link.accessedBy)}
+      </li>`;
+    })
+    .join("")}</ul>`;
+
+  els.shareModalBody.querySelectorAll("input[readonly]").forEach((input) => {
+    input.addEventListener("focus", () => input.select());
+  });
+  els.shareModalBody.querySelectorAll(".share-copy").forEach((btn) => {
+    btn.addEventListener("click", async () => {
+      const code = btn.dataset.code;
+      try {
+        await navigator.clipboard.writeText(shareUrl(code));
+        btn.textContent = "Copied";
+        setTimeout(() => {
+          btn.textContent = "Copy";
+        }, 1500);
+      } catch {
+        setShareModalError("Could not copy – select the link and copy it manually.");
+      }
+    });
+  });
+  els.shareModalBody.querySelectorAll(".share-revoke").forEach((btn) => {
+    btn.addEventListener("click", async () => {
+      const code = btn.dataset.code;
+      if (!confirm("Revoke this link? Anyone using it will lose access.")) return;
+      setShareModalError(null);
+      try {
+        await revokeShare(code);
+        shareLinks = (shareLinks || []).filter((link) => link.code !== code);
+        renderShareLinks();
+      } catch (err) {
+        setShareModalError(err.message || String(err));
+      }
+    });
+  });
+  els.shareModalBody.querySelectorAll(".share-modal__permission").forEach((sel) => {
+    sel.addEventListener("change", async () => {
+      const code = sel.dataset.code;
+      const userid = sel.dataset.userid;
+      const permission = sel.value === "write" ? "write" : "read";
+      const current = shareLinks
+        ?.find((link) => link.code === code)
+        ?.accessedBy?.find((access) => access.userid === userid);
+      const previous = current?.permission === "write" ? "write" : "read";
+      if (permission === previous) return;
+      shareUpdatingKey = `${code}:${userid}`;
+      setShareModalError(null);
+      shareLinks = withSharePermission(shareLinks, code, userid, permission);
+      renderShareLinks();
+      try {
+        await setShareAccess(code, userid, permission);
+      } catch (err) {
+        shareLinks = withSharePermission(shareLinks, code, userid, previous);
+        setShareModalError(err.message || String(err));
+        renderShareLinks();
+      } finally {
+        shareUpdatingKey = null;
+        renderShareLinks();
+      }
+    });
+  });
+}
+
+async function openShareModal() {
+  if (!els.shareModal || isSharedView()) return;
+  const title = document.getElementById("share-modal-title");
+  if (title) title.textContent = `Share “${season?.teamName || "team"}”`;
+  setShareModalError(null);
+  shareLinks = null;
+  renderShareLinks();
+  els.shareModal.hidden = false;
+  if (els.shareCreate) els.shareCreate.disabled = true;
+  try {
+    shareLinks = await listShares();
+    renderShareLinks();
+  } catch (err) {
+    shareLinks = [];
+    renderShareLinks();
+    setShareModalError(err.message || String(err));
+  } finally {
+    if (els.shareCreate) els.shareCreate.disabled = false;
+  }
+}
+
+function closeShareModal() {
+  if (els.shareModal) els.shareModal.hidden = true;
 }
 
 async function startApp() {
@@ -1347,22 +1604,31 @@ async function startApp() {
   appStarted = true;
   try {
     clearError();
-    let loaded = await loadSeasonDoc();
-    if (!loaded) {
-      season = await fetchSeedSeason();
-      season.setupComplete = !!season.teamName && (season.players?.length || 0) >= 5;
-      dirty = true;
-      await saveSeasonDoc(season);
-      dirty = false;
+    const shareCode = readShareCode();
+    if (shareCode) {
+      const loaded = await loadSharedSeason(shareCode);
+      sharedSession = { code: shareCode, permission: loaded.permission };
+      season = loaded.season;
     } else {
-      season = loaded;
+      sharedSession = null;
+      let loaded = await loadSeasonDoc();
+      if (!loaded) {
+        season = await fetchSeedSeason();
+        season.setupComplete = !!season.teamName && (season.players?.length || 0) >= 5;
+        dirty = true;
+        await saveSeasonDoc(season);
+        dirty = false;
+      } else {
+        season = loaded;
+      }
     }
     if (!Array.isArray(season.players)) season.players = [];
     if (!Array.isArray(season.matches)) season.matches = [];
     season.quarterMinutes = getQuarterMinutes();
     renderMatchSelect();
+    updateShareChrome();
 
-    if (needsOnboarding()) {
+    if (!isSharedView() && needsOnboarding()) {
       setScope("setup", { skipHash: true });
       writeHash();
     } else if (location.hash && location.hash !== "#" && !location.hash.includes("setup")) {
@@ -1380,6 +1646,33 @@ async function startApp() {
 }
 
 els.btnSignOut?.addEventListener("click", () => signOut());
+els.btnShare?.addEventListener("click", () => openShareModal());
+els.btnLeaveShare?.addEventListener("click", () => {
+  const url = new URL(window.location.href);
+  url.searchParams.delete(SHARE_PARAM);
+  window.location.href = `${url.pathname}${url.hash || ""}`;
+});
+els.shareCreate?.addEventListener("click", async () => {
+  if (!els.shareCreate) return;
+  els.shareCreate.disabled = true;
+  setShareModalError(null);
+  try {
+    if (dirty) await saveSeason();
+    const share = await createShare();
+    shareLinks = [share, ...(shareLinks || [])];
+    renderShareLinks();
+  } catch (err) {
+    setShareModalError(err.message || String(err));
+  } finally {
+    els.shareCreate.disabled = false;
+  }
+});
+els.shareModal?.addEventListener("click", (e) => {
+  if (e.target.closest("[data-share-close]")) closeShareModal();
+});
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape" && els.shareModal && !els.shareModal.hidden) closeShareModal();
+});
 
 onAuthChange((sess) => {
   if (sess) {

@@ -72,6 +72,9 @@ body {
 .app[hidden],
 .user-chip[hidden],
 .matchday-bar[hidden],
+.share-banner[hidden],
+.modal[hidden],
+.mode[hidden],
 .view[hidden] {
   display: none !important;
 }
@@ -215,6 +218,221 @@ body {
 
 .matchday-bar[hidden] {
   display: none !important;
+}
+
+.share-banner {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.65rem 0.9rem;
+  background: #252a32;
+  border: 1px solid var(--panel-border);
+  border-radius: 8px;
+  color: var(--muted);
+  font-size: 0.88rem;
+  font-weight: 600;
+}
+
+.share-banner .btn-link {
+  font-size: 0.85rem;
+}
+
+.modal {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+}
+
+.modal__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+}
+
+.modal__panel {
+  position: relative;
+  width: min(100%, 520px);
+  max-height: min(90vh, 720px);
+  overflow: auto;
+  padding: 1.25rem 1.35rem 1.5rem;
+  background: var(--panel);
+  border: 1px solid var(--panel-border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.modal__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.modal__head h2 {
+  margin: 0;
+  font-family: var(--display);
+  font-size: 1.8rem;
+  letter-spacing: 0.03em;
+  font-weight: 400;
+}
+
+.modal__close {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  font-size: 1.6rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0.15rem 0.35rem;
+}
+
+.modal__close:hover {
+  color: var(--ink);
+}
+
+.modal__text {
+  margin: 0 0 1rem;
+  color: var(--muted);
+  font-size: 0.92rem;
+  line-height: 1.45;
+}
+
+.share-modal__intro {
+  color: var(--muted);
+}
+
+.share-modal__muted {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
+.share-modal__error {
+  margin: 0 0 0.75rem;
+  color: var(--lose);
+  font-size: 0.88rem;
+}
+
+.share-modal__actions {
+  margin-bottom: 1rem;
+}
+
+.share-modal__body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.share-modal__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.share-modal__list > li + li {
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--panel-border);
+}
+
+.share-modal__link {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.share-modal__link input {
+  width: 100%;
+  padding: 0.45rem 0.55rem;
+  border: 1px solid var(--input-border);
+  border-radius: 6px;
+  background: var(--paper);
+  color: var(--ink);
+  font: inherit;
+  font-size: 0.8rem;
+}
+
+.share-modal__row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.share-modal__row .share-modal__muted {
+  flex: 1;
+  min-width: 8rem;
+}
+
+.share-modal__row .btn {
+  padding: 0.35rem 0.7rem;
+  font-size: 0.8rem;
+}
+
+.share-modal__access ul {
+  margin: 0.25rem 0 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.share-modal__access li {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  font-size: 0.8rem;
+}
+
+.share-modal__person {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.share-modal__permission {
+  flex: none;
+  padding: 0.2rem 0.3rem;
+  border: 1px solid var(--input-border);
+  border-radius: 5px;
+  background: var(--paper);
+  color: var(--ink);
+  font: inherit;
+  font-size: 0.75rem;
+  cursor: pointer;
+}
+
+.share-modal__permission:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.share-modal__viewer {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.share-modal__viewer .share-modal__muted {
+  font-size: 0.75rem;
+}
+
+body.read-only .btn-danger {
+  pointer-events: none;
+  opacity: 0.55;
 }
 
 .modes {
@@ -901,7 +1119,9 @@ tr.motm-row {
 
   .top,
   .toast,
-  .status {
+  .status,
+  .modal,
+  .share-banner {
     display: none !important;
   }
 
