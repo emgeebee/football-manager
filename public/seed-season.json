@@ -1,0 +1,1270 @@
+{
+  "teamName": "Writtle Minors Red",
+  "quarterMinutes": 10,
+  "positions": [
+    "GK",
+    "RB",
+    "LB",
+    "RF",
+    "LF"
+  ],
+  "players": [
+    "Arlo",
+    "Josh",
+    "Max D",
+    "Max N",
+    "Oliver",
+    "Robin",
+    "Theodore",
+    "Zak"
+  ],
+  "matches": [
+    {
+      "id": "2026-09-06-swifts",
+      "date": "2026-09-06",
+      "time": "",
+      "opponent": "Heybridge Swifts",
+      "halfTime": {
+        "for": 0,
+        "against": 2
+      },
+      "fullTime": {
+        "for": 0,
+        "against": 8
+      },
+      "ownGoals": 0,
+      "oppositionManager": "Rich via sms (07921 391 510). nice and helpful. offered food",
+      "notes": "Strong first half, but faded in 2nd. Got a bit sloppy playing out from the back and tired.",
+      "quarters": [
+        {
+          "GK": [
+            "Josh"
+          ],
+          "RB": [
+            "Max N"
+          ],
+          "LB": [
+            "Zak"
+          ],
+          "RF": [
+            "Robin"
+          ],
+          "LF": [
+            "Oliver"
+          ]
+        },
+        {
+          "GK": [
+            "Josh"
+          ],
+          "RB": [
+            "Arlo"
+          ],
+          "LB": [
+            "Theodore"
+          ],
+          "RF": [
+            "Robin"
+          ],
+          "LF": [
+            "Max D"
+          ]
+        },
+        {
+          "GK": [
+            "Zak"
+          ],
+          "RB": [
+            "Max N"
+          ],
+          "LB": [
+            "Theodore"
+          ],
+          "RF": [
+            "Robin"
+          ],
+          "LF": [
+            "Max D"
+          ]
+        },
+        {
+          "GK": [
+            "Zak"
+          ],
+          "RB": [
+            "Arlo"
+          ],
+          "LB": [
+            "Josh"
+          ],
+          "RF": [
+            "Max N"
+          ],
+          "LF": [
+            "Oliver"
+          ]
+        }
+      ],
+      "stats": [
+        {
+          "player": "Arlo",
+          "outfieldPeriods": 2,
+          "goals": 0,
+          "motm": false
+        },
+        {
+          "player": "Josh",
+          "outfieldPeriods": 1,
+          "goals": 0,
+          "motm": false
+        },
+        {
+          "player": "Max D",
+          "outfieldPeriods": 2,
+          "goals": 0,
+          "motm": false
+        },
+        {
+          "player": "Max N",
+          "outfieldPeriods": 3,
+          "goals": 0,
+          "motm": false
+        },
+        {
+          "player": "Oliver",
+          "outfieldPeriods": 2,
+          "goals": 0,
+          "motm": false
+        },
+        {
+          "player": "Robin",
+          "outfieldPeriods": 3,
+          "goals": 0,
+          "motm": false
+        },
+        {
+          "player": "Theodore",
+          "outfieldPeriods": 2,
+          "goals": 0,
+          "motm": true
+        },
+        {
+          "player": "Zak",
+          "outfieldPeriods": 1,
+          "goals": 0,
+          "motm": false
+        }
+      ],
+      "venue": "away"
+    },
+    {
+      "id": "2026-09-20-valley-green-u10",
+      "date": "2026-09-20",
+      "time": "11:00",
+      "opponent": "Valley Green u10 Girls",
+      "halfTime": {
+        "for": 3,
+        "against": 1
+      },
+      "fullTime": {
+        "for": 4,
+        "against": 2
+      },
+      "ownGoals": 2,
+      "oppositionManager": "Zoe Eldridge (+44 7510 378966) on whatsapp. both coaches pleasant enough. one feisty parent.",
+      "notes": "Josh great in goal again\nRobin good in goal but needs kicking practice\nGood passing, and positional play - 1 play especially - robin in goal, to josh, to zak, to max d - just needed final pass\nCouple of rushed bits in front of our own goal. risk v reward\nGood corners - keep firing them in. Focus on where attackers stand\nDefenders to play more centrally especially when other defender goes out of position\nNo heading\nGK throwing",
+      "quarters": [
+        {
+          "GK": [
+            "Josh"
+          ],
+          "RB": [
+            "Robin"
+          ],
+          "LB": [
+            "Max N"
+          ],
+          "RF": [
+            "Arlo"
+          ],
+          "LF": [
+            "Theodore"
+          ]
+        },
+        {
+          "GK": [
+            "Josh"
+          ],
+          "RB": [
+            "Robin"
+          ],
+          "LB": [
+            "Zak"
+          ],
+          "RF": [
+            "Oliver"
+          ],
+          "LF": [
+            "Max D"
+          ]
+        },
+        {
+          "GK": [
+            "Robin"
+          ],
+          "RB": [
+            "Josh"
+          ],
+          "LB": [
+            "Max N"
+          ],
+          "RF": [
+            "Arlo"
+          ],
+          "LF": [
+            "Theodore"
+          ]
+        },
+        {
+          "GK": [
+            "Robin"
+          ],
+          "RB": [
+            "Josh"
+          ],
+          "LB": [
+            "Zak"
+          ],
+          "RF": [
+            "Oliver"
+          ],
+          "LF": [
+            "Max D"
+          ]
+        }
+      ],
+      "stats": [
+        {
+          "player": "Arlo",
+          "outfieldPeriods": 2,
+          "goals": 0,
+          "motm": false
+        },
+        {
+          "player": "Josh",
+          "outfieldPeriods": 2,
+          "goals": 0,
+          "motm": false
+        },
+        {
+          "player": "Max D",
+          "outfieldPeriods": 2,
+          "goals": 1,
+          "motm": false
+        },
+        {
+          "player": "Max N",
+          "outfieldPeriods": 2,
+          "goals": 0,
+          "motm": false
+        },
+        {
+          "player": "Oliver",
+          "outfieldPeriods": 2,
+          "goals": 0,
+          "motm": false
+        },
+        {
+          "player": "Robin",
+          "outfieldPeriods": 2,
+          "goals": 0,
+          "motm": false
+        },
+        {
+          "player": "Theodore",
+          "outfieldPeriods": 2,
+          "goals": 0,
+          "motm": false
+        },
+        {
+          "player": "Zak",
+          "outfieldPeriods": 2,
+          "goals": 1,
+          "motm": true
+        }
+      ],
+      "venue": "home"
+    },
+    {
+      "id": "2026-09-27-easton",
+      "date": "2026-09-27",
+      "time": "11:45",
+      "opponent": "Easton Stingrays",
+      "halfTime": {
+        "for": 0,
+        "against": 5
+      },
+      "fullTime": {
+        "for": 2,
+        "against": 8
+      },
+      "ownGoals": 0,
+      "oppositionManager": "Frank Fisk (07880030764) on whatsapp.",
+      "notes": "Positions important\nGreat goalkeeping again!\nNo complaining to ref",
+      "quarters": [
+        {
+          "GK": [
+            "Max D"
+          ],
+          "RB": [
+            "Josh"
+          ],
+          "LB": [
+            "Zak"
+          ],
+          "RF": [
+            "Oliver"
+          ],
+          "LF": [
+            "Theodore"
+          ]
+        },
+        {
+          "GK": [
+            "Max D"
+          ],
+          "RB": [
+            "Josh"
+          ],
+          "LB": [
+            "Theodore"
+          ],
+          "RF": [
+            "Arlo"
+          ],
+          "LF": [
+            "Robin"
+          ]
+        },
+        {
+          "GK": [
+            "Josh"
+          ],
+          "RB": [
+            "Robin"
+          ],
+          "LB": [
+            "Zak"
+          ],
+          "RF": [
+            "Oliver"
+          ],
+          "LF": [
+            "Theodore"
+          ]
+        },
+        {
+          "GK": [
+            "Josh"
+          ],
+          "RB": [
+            "Arlo"
+          ],
+          "LB": [
+            "Zak"
+          ],
+          "RF": [
+            "Max D"
+          ],
+          "LF": [
+            "Robin"
+          ]
+        }
+      ],
+      "stats": [
+        {
+          "player": "Arlo",
+          "outfieldPeriods": 2,
+          "goals": 0,
+          "motm": false
+        },
+        {
+          "player": "Josh",
+          "outfieldPeriods": 2,
+          "goals": 0,
+          "motm": false
+        },
+        {
+          "player": "Max D",
+          "outfieldPeriods": 1,
+          "goals": 0,
+          "motm": false
+        },
+        {
+          "player": "Max N",
+          "outfieldPeriods": 0,
+          "goals": 0,
+          "motm": false
+        },
+        {
+          "player": "Oliver",
+          "outfieldPeriods": 2,
+          "goals": 1,
+          "motm": false
+        },
+        {
+          "player": "Robin",
+          "outfieldPeriods": 3,
+          "goals": 1,
+          "motm": true
+        },
+        {
+          "player": "Theodore",
+          "outfieldPeriods": 3,
+          "goals": 0,
+          "motm": false
+        },
+        {
+          "player": "Zak",
+          "outfieldPeriods": 3,
+          "goals": 0,
+          "motm": false
+        }
+      ],
+      "venue": "away"
+    },
+    {
+      "id": "2026-10-04-terling",
+      "date": "2026-10-04",
+      "time": "12:30",
+      "opponent": "Terling Titans",
+      "halfTime": {
+        "for": 0,
+        "against": 5
+      },
+      "fullTime": {
+        "for": 2,
+        "against": 7
+      },
+      "ownGoals": 0,
+      "oppositionManager": "Kenan whatsapp (+44 7932 254300)",
+      "notes": "Just focus on rushing - keep one back for corners, no rushing for goal kicks, no passing sideways for goal kicks\n3 soft goals, and we take an extra chance, and its suddenly 4-3 and really close\ntrain on passing and shooting",
+      "quarters": [
+        {
+          "GK": [
+            "Josh"
+          ],
+          "RB": [
+            "Robin"
+          ],
+          "LB": [
+            "Theodore"
+          ],
+          "RF": [
+            "Arlo"
+          ],
+          "LF": [
+            "Zak"
+          ]
+        },
+        {
+          "GK": [
+            "Josh"
+          ],
+          "RB": [
+            "Max N"
+          ],
+          "LB": [
+            "Zak"
+          ],
+          "RF": [
+            "Oliver"
+          ],
+          "LF": [
+            "Max D"
+          ]
+        },
+        {
+          "GK": [
+            "Zak"
+          ],
+          "RB": [
+            "Josh"
+          ],
+          "LB": [
+            "Arlo"
+          ],
+          "RF": [
+            "Max N"
+          ],
+          "LF": [
+            "Max D"
+          ]
+        },
+        {
+          "GK": [
+            "Zak"
+          ],
+          "RB": [
+            "Josh"
+          ],
+          "LB": [
+            "Robin"
+          ],
+          "RF": [
+            "Oliver"
+          ],
+          "LF": [
+            "Theodore"
+          ]
+        }
+      ],
+      "stats": [
+        {
+          "player": "Arlo",
+          "outfieldPeriods": 2,
+          "goals": 0,
+          "motm": false
+        },
+        {
+          "player": "Josh",
+          "outfieldPeriods": 2,
+          "goals": 0,
+          "motm": false
+        },
+        {
+          "player": "Max D",
+          "outfieldPeriods": 2,
+          "goals": 0,
+          "motm": false
+        },
+        {
+          "player": "Max N",
+          "outfieldPeriods": 2,
+          "goals": 0,
+          "motm": false
+        },
+        {
+          "player": "Oliver",
+          "outfieldPeriods": 2,
+          "goals": 1,
+          "motm": false
+        },
+        {
+          "player": "Robin",
+          "outfieldPeriods": 2,
+          "goals": 0,
+          "motm": false
+        },
+        {
+          "player": "Theodore",
+          "outfieldPeriods": 2,
+          "goals": 1,
+          "motm": true
+        },
+        {
+          "player": "Zak",
+          "outfieldPeriods": 2,
+          "goals": 0,
+          "motm": false
+        }
+      ],
+      "venue": "away"
+    },
+    {
+      "id": "2026-10-11-galleywood",
+      "date": "2026-10-11",
+      "time": "09:30",
+      "opponent": "Galleywood",
+      "halfTime": {
+        "for": 3,
+        "against": 1
+      },
+      "fullTime": {
+        "for": 6,
+        "against": 2
+      },
+      "ownGoals": 0,
+      "oppositionManager": "Sam Degun (+44 7969 282819)",
+      "notes": "",
+      "quarters": [
+        {
+          "GK": [
+            "Josh"
+          ],
+          "RB": [
+            "Robin"
+          ],
+          "LB": [
+            "Theodore"
+          ],
+          "RF": [
+            "Oliver"
+          ],
+          "LF": [
+            "Max N"
+          ]
+        },
+        {
+          "GK": [
+            "Josh"
+          ],
+          "RB": [
+            "Robin"
+          ],
+          "LB": [
+            "Zak"
+          ],
+          "RF": [
+            "Arlo"
+          ],
+          "LF": [
+            "Max D"
+          ]
+        },
+        {
+          "GK": [
+            "Robin"
+          ],
+          "RB": [
+            "Josh"
+          ],
+          "LB": [
+            "Arlo"
+          ],
+          "RF": [
+            "Oliver"
+          ],
+          "LF": [
+            "Theodore"
+          ]
+        },
+        {
+          "GK": [
+            "Robin"
+          ],
+          "RB": [
+            "Josh"
+          ],
+          "LB": [
+            "Zak"
+          ],
+          "RF": [
+            "Max N"
+          ],
+          "LF": [
+            "Max D"
+          ]
+        }
+      ],
+      "stats": [
+        {
+          "player": "Arlo",
+          "outfieldPeriods": 2,
+          "goals": 0,
+          "motm": false
+        },
+        {
+          "player": "Josh",
+          "outfieldPeriods": 2,
+          "goals": 0,
+          "motm": false
+        },
+        {
+          "player": "Max D",
+          "outfieldPeriods": 2,
+          "goals": 0,
+          "motm": false
+        },
+        {
+          "player": "Max N",
+          "outfieldPeriods": 2,
+          "goals": 3,
+          "motm": true
+        },
+        {
+          "player": "Oliver",
+          "outfieldPeriods": 2,
+          "goals": 0,
+          "motm": false
+        },
+        {
+          "player": "Robin",
+          "outfieldPeriods": 2,
+          "goals": 1,
+          "motm": false
+        },
+        {
+          "player": "Theodore",
+          "outfieldPeriods": 2,
+          "goals": 1,
+          "motm": false
+        },
+        {
+          "player": "Zak",
+          "outfieldPeriods": 2,
+          "goals": 1,
+          "motm": false
+        }
+      ],
+      "venue": "home"
+    },
+    {
+      "id": "2026-10-18-tiptree",
+      "date": "2026-10-18",
+      "time": "10:00",
+      "opponent": "Tiptree",
+      "halfTime": {
+        "for": 0,
+        "against": 5
+      },
+      "fullTime": {
+        "for": 0,
+        "against": 9
+      },
+      "ownGoals": 0,
+      "oppositionManager": "Steve (whatsapp) - +44 7931 819504",
+      "notes": "",
+      "quarters": [
+        {
+          "GK": [
+            "Arlo"
+          ],
+          "RB": [
+            "Robin"
+          ],
+          "LB": [
+            "Josh"
+          ],
+          "RF": [
+            "Max N"
+          ],
+          "LF": [
+            "Max D"
+          ]
+        },
+        {
+          "GK": [
+            "Arlo"
+          ],
+          "RB": [
+            "Josh"
+          ],
+          "LB": [
+            "Zak"
+          ],
+          "RF": [
+            "Max N"
+          ],
+          "LF": [
+            "Oliver"
+          ]
+        },
+        {
+          "GK": [
+            "Josh"
+          ],
+          "RB": [
+            "Robin"
+          ],
+          "LB": [
+            "Arlo"
+          ],
+          "RF": [
+            "Max D"
+          ],
+          "LF": [
+            "Zak"
+          ]
+        },
+        {
+          "GK": [
+            "Josh"
+          ],
+          "RB": [
+            "Robin"
+          ],
+          "LB": [
+            "Arlo"
+          ],
+          "RF": [
+            "Max N"
+          ],
+          "LF": [
+            "Oliver"
+          ]
+        }
+      ],
+      "stats": [
+        {
+          "player": "Arlo",
+          "outfieldPeriods": 2,
+          "goals": 0,
+          "motm": false
+        },
+        {
+          "player": "Josh",
+          "outfieldPeriods": 2,
+          "goals": 0,
+          "motm": false
+        },
+        {
+          "player": "Max D",
+          "outfieldPeriods": 2,
+          "goals": 0,
+          "motm": true
+        },
+        {
+          "player": "Max N",
+          "outfieldPeriods": 3,
+          "goals": 0,
+          "motm": false
+        },
+        {
+          "player": "Oliver",
+          "outfieldPeriods": 2,
+          "goals": 0,
+          "motm": false
+        },
+        {
+          "player": "Robin",
+          "outfieldPeriods": 3,
+          "goals": 0,
+          "motm": false
+        },
+        {
+          "player": "Theodore",
+          "outfieldPeriods": 0,
+          "goals": 0,
+          "motm": false
+        },
+        {
+          "player": "Zak",
+          "outfieldPeriods": 2,
+          "goals": 0,
+          "motm": false
+        }
+      ],
+      "venue": "away"
+    },
+    {
+      "id": "2026-11-01-valley-green-girls",
+      "date": "2026-11-01",
+      "time": "11:15",
+      "opponent": "Valley Green girls",
+      "halfTime": {
+        "for": 0,
+        "against": 4
+      },
+      "fullTime": {
+        "for": 1,
+        "against": 6
+      },
+      "ownGoals": 0,
+      "oppositionManager": "",
+      "notes": "",
+      "quarters": [
+        {
+          "GK": [
+            "Josh"
+          ],
+          "RB": [
+            "Arlo"
+          ],
+          "LB": [
+            "Theodore"
+          ],
+          "RF": [
+            "Robin"
+          ],
+          "LF": [
+            "Zak"
+          ]
+        },
+        {
+          "GK": [
+            "Josh"
+          ],
+          "RB": [
+            "Arlo"
+          ],
+          "LB": [
+            "Theodore",
+            "Zak"
+          ],
+          "RF": [
+            "Oliver"
+          ],
+          "LF": [
+            "Max N"
+          ]
+        },
+        {
+          "GK": [
+            "Arlo"
+          ],
+          "RB": [
+            "Josh"
+          ],
+          "LB": [
+            "Zak"
+          ],
+          "RF": [
+            "Robin"
+          ],
+          "LF": [
+            "Max N"
+          ]
+        },
+        {
+          "GK": [
+            "Arlo"
+          ],
+          "RB": [
+            "Josh"
+          ],
+          "LB": [
+            "Theodore"
+          ],
+          "RF": [
+            "Oliver"
+          ],
+          "LF": [
+            "Max N",
+            "Robin"
+          ]
+        }
+      ],
+      "stats": [
+        {
+          "player": "Arlo",
+          "outfieldPeriods": 2,
+          "goals": 0,
+          "motm": false
+        },
+        {
+          "player": "Josh",
+          "outfieldPeriods": 2,
+          "goals": 0,
+          "motm": false
+        },
+        {
+          "player": "Max D",
+          "outfieldPeriods": 0,
+          "goals": 0,
+          "motm": false
+        },
+        {
+          "player": "Max N",
+          "outfieldPeriods": 2.5,
+          "goals": 1,
+          "motm": false
+        },
+        {
+          "player": "Oliver",
+          "outfieldPeriods": 2,
+          "goals": 0,
+          "motm": false
+        },
+        {
+          "player": "Robin",
+          "outfieldPeriods": 2.5,
+          "goals": 0,
+          "motm": false
+        },
+        {
+          "player": "Theodore",
+          "outfieldPeriods": 2.5,
+          "goals": 0,
+          "motm": false
+        },
+        {
+          "player": "Zak",
+          "outfieldPeriods": 2.5,
+          "goals": 0,
+          "motm": false
+        }
+      ],
+      "venue": "away"
+    },
+    {
+      "id": "2026-11-08-hatfield",
+      "date": "2026-11-08",
+      "time": "09:30",
+      "opponent": "Hatfield Peverel Falcons",
+      "halfTime": {
+        "for": 1,
+        "against": 3
+      },
+      "fullTime": {
+        "for": 2,
+        "against": 6
+      },
+      "ownGoals": 0,
+      "oppositionManager": "",
+      "notes": "lots of passing into the middle from goal kicks",
+      "quarters": [
+        {
+          "GK": [
+            "Robin"
+          ],
+          "RB": [
+            "Josh"
+          ],
+          "LB": [
+            "Theodore"
+          ],
+          "RF": [
+            "Max D"
+          ],
+          "LF": [
+            "Oliver"
+          ]
+        },
+        {
+          "GK": [
+            "Robin"
+          ],
+          "RB": [
+            "Josh"
+          ],
+          "LB": [
+            "Arlo"
+          ],
+          "RF": [
+            "Max D",
+            "Oliver"
+          ],
+          "LF": [
+            "Zak"
+          ]
+        },
+        {
+          "GK": [
+            "Josh"
+          ],
+          "RB": [
+            "Arlo"
+          ],
+          "LB": [
+            "Theodore"
+          ],
+          "RF": [
+            "Robin"
+          ],
+          "LF": [
+            "Zak"
+          ]
+        },
+        {
+          "GK": [
+            "Josh"
+          ],
+          "RB": [
+            "Robin"
+          ],
+          "LB": [
+            "Theodore",
+            "Zak"
+          ],
+          "RF": [
+            "Max D"
+          ],
+          "LF": [
+            "Oliver"
+          ]
+        }
+      ],
+      "stats": [
+        {
+          "player": "Arlo",
+          "outfieldPeriods": 2,
+          "goals": 0,
+          "motm": false
+        },
+        {
+          "player": "Josh",
+          "outfieldPeriods": 2,
+          "goals": 0,
+          "motm": false
+        },
+        {
+          "player": "Max D",
+          "outfieldPeriods": 2.5,
+          "goals": 0,
+          "motm": false
+        },
+        {
+          "player": "Max N",
+          "outfieldPeriods": 0,
+          "goals": 0,
+          "motm": false
+        },
+        {
+          "player": "Oliver",
+          "outfieldPeriods": 2.5,
+          "goals": 0,
+          "motm": false
+        },
+        {
+          "player": "Robin",
+          "outfieldPeriods": 2,
+          "goals": 1,
+          "motm": true
+        },
+        {
+          "player": "Theodore",
+          "outfieldPeriods": 2.5,
+          "goals": 0,
+          "motm": false
+        },
+        {
+          "player": "Zak",
+          "outfieldPeriods": 2.5,
+          "goals": 1,
+          "motm": false
+        }
+      ],
+      "venue": "home"
+    },
+    {
+      "id": "2026-11-15-7g3zt",
+      "date": "2026-11-15",
+      "time": "10:40",
+      "opponent": "Baddow Spartak",
+      "venue": "home",
+      "halfTime": {
+        "for": 0,
+        "against": 0
+      },
+      "fullTime": {
+        "for": 0,
+        "against": 0
+      },
+      "ownGoals": 0,
+      "oppositionManager": "",
+      "notes": "",
+      "quarters": [
+        {
+          "GK": [
+            "Josh"
+          ],
+          "RB": [
+            "Robin"
+          ],
+          "LB": [
+            "Zak"
+          ],
+          "RF": [
+            "Oliver"
+          ],
+          "LF": [
+            "Theodore"
+          ]
+        },
+        {
+          "GK": [
+            "Josh"
+          ],
+          "RB": [
+            "Arlo"
+          ],
+          "LB": [
+            "Theodore"
+          ],
+          "RF": [
+            "Max D"
+          ],
+          "LF": [
+            "Max N"
+          ]
+        },
+        {
+          "GK": [
+            "Theodore"
+          ],
+          "RB": [
+            "Josh"
+          ],
+          "LB": [
+            "Arlo"
+          ],
+          "RF": [
+            "Max N"
+          ],
+          "LF": [
+            "Oliver"
+          ]
+        },
+        {
+          "GK": [
+            "Theodore"
+          ],
+          "RB": [
+            "Robin"
+          ],
+          "LB": [
+            "Josh"
+          ],
+          "RF": [
+            "Max D"
+          ],
+          "LF": [
+            "Zak"
+          ]
+        }
+      ],
+      "stats": [
+        {
+          "player": "Arlo",
+          "outfieldPeriods": 2,
+          "goals": 0,
+          "motm": false
+        },
+        {
+          "player": "Josh",
+          "outfieldPeriods": 2,
+          "goals": 0,
+          "motm": false
+        },
+        {
+          "player": "Max D",
+          "outfieldPeriods": 2,
+          "goals": 0,
+          "motm": false
+        },
+        {
+          "player": "Max N",
+          "outfieldPeriods": 2,
+          "goals": 0,
+          "motm": false
+        },
+        {
+          "player": "Oliver",
+          "outfieldPeriods": 2,
+          "goals": 0,
+          "motm": false
+        },
+        {
+          "player": "Robin",
+          "outfieldPeriods": 2,
+          "goals": 0,
+          "motm": false
+        },
+        {
+          "player": "Theodore",
+          "outfieldPeriods": 2,
+          "goals": 0,
+          "motm": false
+        },
+        {
+          "player": "Zak",
+          "outfieldPeriods": 2,
+          "goals": 0,
+          "motm": false
+        }
+      ]
+    }
+  ],
+  "setupComplete": true
+}

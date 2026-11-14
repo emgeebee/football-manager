@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Football Manager</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div id="auth-gate" class="auth-gate">
+      <div class="auth-card">
+        <p class="auth-brand">Football Manager</p>
+        <p class="auth-text">Sign in with Google to sync your team sheet.</p>
+        <div id="google-btn" class="auth-google"></div>
+        <p id="auth-error" class="auth-error" hidden></p>
+      </div>
+    </div>
+
+    <div class="app" id="app" hidden>
+      <header class="top">
+        <div class="brand-block">
+          <button type="button" class="brand" id="team-name" title="Season overview">
+            Football Manager
+          </button>
+          <p class="tagline" id="tagline">Matchday sheet</p>
+        </div>
+
+        <div class="header-end">
+          <nav class="scope-nav" aria-label="Section">
+            <button type="button" class="scope-btn" data-scope="season" id="scope-season">Season</button>
+            <button type="button" class="scope-btn active" data-scope="matchday" id="scope-matchday">
+              Matchday
+            </button>
+            <button type="button" class="scope-btn" data-scope="setup" id="scope-setup" title="Team setup">
+              Setup
+            </button>
+          </nav>
+          <div class="user-chip" id="user-chip" hidden>
+            <img id="user-pic" alt="" width="28" height="28" />
+            <span id="user-name"></span>
+            <button type="button" class="btn-link" id="btn-sign-out">Sign out</button>
+          </div>
+        </div>
+
+        <div class="matchday-bar" id="matchday-bar">
+          <nav class="modes" role="tablist" aria-label="Match view">
+            <button type="button" class="mode active" data-mode="match" role="tab" aria-selected="true">
+              Match
+            </button>
+            <button type="button" class="mode" data-mode="edit" role="tab" aria-selected="false">
+              Edit
+            </button>
+            <button type="button" class="mode" data-mode="teamsheet" role="tab" aria-selected="false">
+              Teamsheet
+            </button>
+          </nav>
+          <div class="top-actions">
+            <label class="match-pick" id="match-pick">
+              <span class="sr-only">Select match</span>
+              <select id="match-select"></select>
+            </label>
+            <button type="button" id="btn-new-match" class="btn btn-secondary">New match</button>
+          </div>
+        </div>
+      </header>
+
+      <main>
+        <section id="view-setup" class="view" aria-label="Team setup" hidden></section>
+        <section id="view-season" class="view" aria-label="Season" hidden></section>
+        <section id="view-match" class="view active" aria-label="Match details"></section>
+        <section id="view-edit" class="view" aria-label="Edit match" hidden></section>
+        <section id="view-teamsheet" class="view" aria-label="Teamsheet" hidden></section>
+      </main>
+
+      <p id="status" class="status" hidden></p>
+      <p id="toast" class="toast" hidden></p>
+    </div>
+    <script src="./app.js" type="module"></script>
+  </body>
+</html>

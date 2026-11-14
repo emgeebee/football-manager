@@ -1,0 +1,10 @@
+{
+  "name": "football-manager",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Kids football matchday sheet — Google sign-in, synced via trackmyholidays docs API",
+  "scripts": {
+    "start": "npx --yes serve public -p 3000",
+    "dev": "npx --yes serve public -p 3000"
+  }
+}
