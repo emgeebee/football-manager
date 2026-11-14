@@ -67,6 +67,15 @@ body {
   padding: 1.5rem;
 }
 
+/* Author `display` otherwise wins over the hidden attribute */
+.auth-gate[hidden],
+.app[hidden],
+.user-chip[hidden],
+.matchday-bar[hidden],
+.view[hidden] {
+  display: none !important;
+}
+
 .auth-card {
   width: min(100%, 380px);
   padding: 2rem 1.5rem;
