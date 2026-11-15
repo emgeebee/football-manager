@@ -71,11 +71,11 @@ body {
 .auth-gate[hidden],
 .app[hidden],
 .user-chip[hidden],
+.season-bar[hidden],
 .matchday-bar[hidden],
 .share-banner[hidden],
 .modal[hidden],
 .mode[hidden],
-.scope-btn[hidden],
 .view[hidden] {
   display: none !important;
 }
@@ -177,48 +177,22 @@ body {
   color: var(--muted);
 }
 
-.scope-nav {
-  display: flex;
-  gap: 0.35rem;
-  align-items: center;
-  background: var(--paper-2);
-  padding: 0.3rem;
-  border-radius: 999px;
-}
-
-.scope-btn {
-  appearance: none;
-  border: 0;
-  background: transparent;
-  font: inherit;
-  font-weight: 700;
-  font-size: 0.92rem;
-  padding: 0.55rem 1.15rem;
-  border-radius: 999px;
-  color: var(--muted);
-  cursor: pointer;
-}
-
-.scope-btn:hover {
-  color: var(--ink);
-}
-
-.scope-btn.active {
-  background: var(--pitch);
-  color: #06140c;
-}
-
+.season-bar,
 .matchday-bar {
   grid-column: 1 / -1;
   display: flex;
   flex-wrap: wrap;
   gap: 0.75rem 1rem;
   align-items: center;
-  justify-content: space-between;
 }
 
+.season-bar[hidden],
 .matchday-bar[hidden] {
   display: none !important;
+}
+
+.matchday-bar .btn {
+  flex: none;
 }
 
 .share-banner {
@@ -468,16 +442,6 @@ body.read-only .btn-danger {
   color: #06140c;
 }
 
-.top-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  align-items: center;
-  justify-content: flex-end;
-  margin-left: auto;
-}
-
-.match-pick select,
 .player-select,
 .form-grid input,
 .form-grid select,
@@ -501,18 +465,6 @@ body.read-only .btn-danger {
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23e8f0ea' d='M1 1l5 5 5-5'/%3E%3C/svg%3E")
       right 0.6rem center / 10px no-repeat,
     var(--paper-2);
-}
-
-.match-pick select {
-  font-weight: 600;
-  padding: 0.65rem 2.4rem 0.65rem 0.9rem;
-  background:
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23e8f0ea' d='M1 1l5 5 5-5'/%3E%3C/svg%3E")
-      right 0.85rem center / 12px no-repeat,
-    var(--paper-2);
-  min-width: min(100%, 240px);
-  width: auto;
-  cursor: pointer;
 }
 
 .player-select {
@@ -788,6 +740,12 @@ tr.motm-row {
 .season-head p {
   margin: 0.35rem 0 0;
   color: var(--muted);
+}
+
+.season-actions {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: flex-start;
 }
 
 .bbc-results {
@@ -1150,7 +1108,9 @@ a.bbc-row:hover {
   .toast,
   .status,
   .modal,
-  .share-banner {
+  .share-banner,
+  .season-bar,
+  .matchday-bar {
     display: none !important;
   }
 

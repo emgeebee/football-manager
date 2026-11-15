@@ -25,22 +25,13 @@
     <div class="app" id="app" hidden>
       <header class="top">
         <div class="brand-block">
-          <button type="button" class="brand" id="team-name" title="Season overview">
+          <button type="button" class="brand" id="team-name" title="Season fixtures">
             Football Manager
           </button>
-          <p class="tagline" id="tagline">Matchday sheet</p>
+          <p class="tagline" id="tagline">Season fixtures</p>
         </div>
 
         <div class="header-end">
-          <nav class="scope-nav" aria-label="Section">
-            <button type="button" class="scope-btn active" data-scope="season" id="scope-season">Season</button>
-            <button type="button" class="scope-btn" data-scope="matchday" id="scope-matchday">
-              Matchday
-            </button>
-            <button type="button" class="scope-btn" data-scope="setup" id="scope-setup" title="Team setup">
-              Setup
-            </button>
-          </nav>
           <button type="button" class="btn btn-secondary" id="btn-share" hidden>Share</button>
           <div class="user-chip" id="user-chip" hidden>
             <img id="user-pic" alt="" width="28" height="28" />
@@ -54,7 +45,22 @@
           <button type="button" class="btn-link" id="btn-leave-share">Open my team</button>
         </div>
 
+        <div class="season-bar" id="season-bar">
+          <nav class="modes" role="tablist" aria-label="Season view">
+            <button type="button" class="mode active" data-season-tab="fixtures" role="tab" aria-selected="true">
+              Fixtures
+            </button>
+            <button type="button" class="mode" data-season-tab="stats" role="tab" aria-selected="false">
+              Stats
+            </button>
+            <button type="button" class="mode" data-season-tab="setup" id="scope-setup" role="tab" aria-selected="false" title="Team setup">
+              Setup
+            </button>
+          </nav>
+        </div>
+
         <div class="matchday-bar" id="matchday-bar" hidden>
+          <button type="button" class="btn btn-secondary" id="btn-back-season">← Fixtures</button>
           <nav class="modes" role="tablist" aria-label="Match view">
             <button type="button" class="mode active" data-mode="match" role="tab" aria-selected="true">
               Match
@@ -66,13 +72,6 @@
               Teamsheet
             </button>
           </nav>
-          <div class="top-actions">
-            <label class="match-pick" id="match-pick">
-              <span class="sr-only">Select match</span>
-              <select id="match-select"></select>
-            </label>
-            <button type="button" id="btn-new-match" class="btn btn-secondary">New match</button>
-          </div>
         </div>
       </header>
 

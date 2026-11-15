@@ -50,9 +50,9 @@ const els = {
   shareCreate: document.getElementById("share-create"),
   teamName: document.getElementById("team-name"),
   tagline: document.getElementById("tagline"),
-  matchSelect: document.getElementById("match-select"),
+  seasonBar: document.getElementById("season-bar"),
   matchdayBar: document.getElementById("matchday-bar"),
-  btnNewMatch: document.getElementById("btn-new-match"),
+  btnBackSeason: document.getElementById("btn-back-season"),
   viewMatch: document.getElementById("view-match"),
   viewEdit: document.getElementById("view-edit"),
   viewTeamsheet: document.getElementById("view-teamsheet"),
@@ -60,12 +60,14 @@ const els = {
   viewSetup: document.getElementById("view-setup"),
   status: document.getElementById("status"),
   toast: document.getElementById("toast"),
-  modes: document.querySelectorAll(".mode"),
-  scopeBtns: document.querySelectorAll(".scope-btn"),
+  seasonTabs: document.querySelectorAll("[data-season-tab]"),
+  matchModes: document.querySelectorAll("#matchday-bar [data-mode]"),
 };
 
 /** @type {"season" | "matchday" | "setup"} */
 let scope = "season";
+/** fixtures | stats — only used in season scope */
+let seasonTab = "fixtures";
 /** match | edit | teamsheet — only used in matchday scope */
 let matchMode = "match";
 /** Skip writing hash while applying one from the URL */
@@ -326,8 +328,7 @@ function updateShareChrome() {
       ? "Viewing a shared team · You can edit"
       : "Viewing a shared team · View only";
   }
-  if (els.btnNewMatch) els.btnNewMatch.hidden = !editable;
-  const editTab = document.querySelector('.mode[data-mode="edit"]');
+  const editTab = document.querySelector('#matchday-bar [data-mode="edit"]');
   if (editTab) editTab.hidden = !editable;
   const setupBtn = document.getElementById("scope-setup");
   if (setupBtn) setupBtn.hidden = !editable;
@@ -372,24 +373,13 @@ function escapeHtml(str) {
     .replace(/"/g, "&quot;");
 }
 
-function renderMatchSelect() {
-  const matches = [...season.matches].sort((a, b) => {
+function ensureCurrentMatch() {
+  if (currentMatchId && getMatch(currentMatchId)) return;
+  const matches = [...(season.matches || [])].sort((a, b) => {
     if (a.date !== b.date) return a.date < b.date ? 1 : -1;
     return (a.time || "").localeCompare(b.time || "");
   });
-  els.matchSelect.innerHTML = matches
-    .map((m) => {
-      const when = m.time ? `${formatDate(m.date)} ${m.time}` : formatDate(m.date);
-      const venue =
-        m.venue === "home" ? "Home" : m.venue === "away" ? "Away" : "Venue?";
-      const label = `${when} · ${venue} · ${m.opponent || "(no opponent)"}`;
-      return `<option value="${m.id}">${escapeHtml(label)}</option>`;
-    })
-    .join("");
-  if (!currentMatchId || !getMatch(currentMatchId)) {
-    currentMatchId = matches[0]?.id ?? null;
-  }
-  if (currentMatchId) els.matchSelect.value = currentMatchId;
+  currentMatchId = matches[0]?.id ?? null;
 }
 
 function renderMatchView(match) {
@@ -697,12 +687,10 @@ function wireEditHandlers(match) {
       currentMatchId = match.id;
       writeHash();
     }
-    renderMatchSelect();
     markDirty();
   });
   bind("edit-time", (e) => {
     match.time = e.target.value;
-    renderMatchSelect();
     markDirty();
   });
   bind("edit-venue", (e) => {
@@ -711,7 +699,6 @@ function wireEditHandlers(match) {
   });
   bind("edit-opponent", (e) => {
     match.opponent = e.target.value;
-    renderMatchSelect();
     markDirty();
   });
   bind("edit-og", (e) => {
@@ -772,14 +759,8 @@ function wireEditHandlers(match) {
     season.matches = season.matches.filter((m) => m.id !== match.id);
     currentMatchId = season.matches[0]?.id ?? null;
     markDirty();
-    renderMatchSelect();
-    if (!currentMatchId) {
-      const m = createMatch();
-      season.matches.push(m);
-      currentMatchId = m.id;
-      renderMatchSelect();
-    }
-    setMatchMode("edit");
+    seasonTab = "fixtures";
+    setScope("season");
   });
 
   document.getElementById("btn-clear-motm")?.addEventListener("click", () => {
@@ -969,8 +950,7 @@ function boardList(rows, key, suffix = "") {
     .join("");
 }
 
-function renderSeason() {
-  const rows = aggregateSeason();
+function renderSeasonFixtures() {
   const n = season.matches?.length || 0;
   const chronological = [...(season.matches || [])].sort((a, b) => {
     if (a.date !== b.date) return a.date < b.date ? -1 : 1;
@@ -983,7 +963,7 @@ function renderSeason() {
       const future = isFutureMatch(m);
       const res = resultOf(m);
       const unset = !m.venue
-        ? `<div class="bbc-unset"><span class="venue-badge">Set home/away in Matchday → Edit</span></div>`
+        ? `<div class="bbc-unset"><span class="venue-badge">Set home/away in Edit</span></div>`
         : "";
       const koTime = m.time || "TBC";
       const scoreCentre = future
@@ -1007,14 +987,32 @@ function renderSeason() {
     })
     .join("");
 
+  const newMatch = canEdit()
+    ? `<div class="season-actions">
+        <button type="button" class="btn btn-secondary" id="btn-new-match">New match</button>
+      </div>`
+    : "";
+
   els.viewSeason.innerHTML = `
     <div class="season-head">
-      <h1>Season results</h1>
+      <h1>Fixtures</h1>
       <p>${n} match${n === 1 ? "" : "es"}</p>
     </div>
     <div class="bbc-results">${results || `<p class="season-intro">No matches yet</p>`}</div>
+    ${newMatch}
+  `;
+
+  document.getElementById("btn-new-match")?.addEventListener("click", addNewMatch);
+}
+
+function renderSeasonStats() {
+  const rows = aggregateSeason();
+  els.viewSeason.innerHTML = `
+    <div class="season-head">
+      <h1>Player totals</h1>
+      <p>Season stats</p>
+    </div>
     <div class="panel season-table-wrap">
-      <h2>Player totals</h2>
       <div style="overflow-x:auto">
         <table>
           <thead>
@@ -1052,6 +1050,11 @@ function renderSeason() {
       </div>
     </div>
   `;
+}
+
+function renderSeason() {
+  if (seasonTab === "stats") renderSeasonStats();
+  else renderSeasonFixtures();
 }
 
 function renamePlayerEverywhere(oldName, newName) {
@@ -1232,7 +1235,9 @@ function wireSetupHandlers() {
 
 function hashForState() {
   if (scope === "setup") return "#/setup";
-  if (scope === "season") return "#/season";
+  if (scope === "season") {
+    return seasonTab === "stats" ? "#/season/stats" : "#/season";
+  }
   const id = currentMatchId ? encodeURIComponent(currentMatchId) : "";
   return `#/matchday/${matchMode}/${id}`;
 }
@@ -1254,7 +1259,10 @@ function parseHash() {
     }
   });
   if (parts[0] === "setup") return { scope: "setup" };
-  if (parts[0] === "season") return { scope: "season" };
+  if (parts[0] === "season") {
+    const tab = parts[1] === "stats" ? "stats" : "fixtures";
+    return { scope: "season", seasonTab: tab };
+  }
   if (parts[0] === "matchday") {
     const mode = ["match", "edit", "teamsheet"].includes(parts[1]) ? parts[1] : "match";
     return { scope: "matchday", matchMode: mode, matchId: parts[2] || null };
@@ -1262,7 +1270,7 @@ function parseHash() {
   if (["match", "edit", "teamsheet"].includes(parts[0])) {
     return { scope: "matchday", matchMode: parts[0], matchId: parts[1] || null };
   }
-  return { scope: "matchday", matchMode: "match", matchId: null };
+  return { scope: "season", seasonTab: "fixtures" };
 }
 
 function applyHash() {
@@ -1276,46 +1284,66 @@ function applyHash() {
     if (h.scope === "setup") {
       setScope("setup", { skipHash: true });
     } else if (h.scope === "season") {
+      seasonTab = h.seasonTab === "stats" ? "stats" : "fixtures";
       setScope("season", { skipHash: true });
     } else if (h.scope === "matchday" || h.matchMode) {
       setScope("matchday", { skipHash: true });
       setMatchMode(h.matchMode || "match", { skipHash: true });
     } else {
-      setScope("matchday", { skipHash: true });
-      setMatchMode("match", { skipHash: true });
-    }
-    if (els.matchSelect && currentMatchId) {
-      els.matchSelect.value = currentMatchId;
+      seasonTab = "fixtures";
+      setScope("season", { skipHash: true });
     }
   } finally {
     applyingHash = false;
   }
 }
 
-function setScope(next, { skipHash = false } = {}) {
-  if (next === "setup" && !canEdit()) next = "matchday";
-  scope = next;
-  els.scopeBtns.forEach((btn) => {
-    btn.classList.toggle("active", btn.dataset.scope === scope);
+function syncSeasonTabs() {
+  els.seasonTabs.forEach((btn) => {
+    const tab = btn.dataset.seasonTab;
+    const on =
+      (scope === "setup" && tab === "setup") ||
+      (scope === "season" && tab === seasonTab);
+    btn.classList.toggle("active", on);
+    btn.setAttribute("aria-selected", on ? "true" : "false");
   });
+}
+
+function setScope(next, { skipHash = false } = {}) {
+  if (next === "setup" && !canEdit()) next = "season";
+  scope = next;
+  if (scope === "season" && seasonTab === "setup") seasonTab = "fixtures";
+  syncSeasonTabs();
+  if (els.seasonBar) els.seasonBar.hidden = scope === "matchday";
   if (els.matchdayBar) els.matchdayBar.hidden = scope !== "matchday";
   if (els.tagline) {
     els.tagline.textContent =
-      scope === "season"
-        ? "Season overview"
-        : scope === "setup"
-          ? "Team setup"
-          : "Matchday sheet";
+      scope === "setup"
+        ? "Team setup"
+        : scope === "matchday"
+          ? "Matchday sheet"
+          : seasonTab === "stats"
+            ? "Season stats"
+            : "Season fixtures";
   }
   applyViewVisibility();
   render();
   if (!skipHash) writeHash();
 }
 
+function setSeasonTab(tab, { skipHash = false } = {}) {
+  if (tab === "setup") {
+    setScope("setup", { skipHash });
+    return;
+  }
+  seasonTab = tab === "stats" ? "stats" : "fixtures";
+  setScope("season", { skipHash });
+}
+
 function setMatchMode(next, { skipHash = false } = {}) {
   if (next === "edit" && !canEdit()) next = "match";
   matchMode = next;
-  els.modes.forEach((btn) => {
+  els.matchModes.forEach((btn) => {
     const on = btn.dataset.mode === matchMode;
     btn.classList.toggle("active", on);
     btn.setAttribute("aria-selected", on ? "true" : "false");
@@ -1349,6 +1377,7 @@ function render() {
     renderSeason();
     return;
   }
+  ensureCurrentMatch();
   const match = getMatch(currentMatchId);
   if (!match) {
     showError("No match selected.");
@@ -1366,32 +1395,31 @@ function addNewMatch() {
   season.matches.push(match);
   currentMatchId = match.id;
   markDirty();
-  renderMatchSelect();
   setScope("matchday");
   setMatchMode("edit");
 }
 
-document.querySelector(".scope-nav")?.addEventListener("click", (e) => {
-  const btn = e.target.closest(".scope-btn");
-  if (!btn?.dataset.scope) return;
-  setScope(btn.dataset.scope);
+els.teamName?.addEventListener("click", () => {
+  seasonTab = "fixtures";
+  setScope("season");
 });
 
-els.teamName?.addEventListener("click", () => setScope("season"));
+els.seasonBar?.addEventListener("click", (e) => {
+  const btn = e.target.closest("[data-season-tab]");
+  if (!btn?.dataset.seasonTab) return;
+  setSeasonTab(btn.dataset.seasonTab);
+});
 
-document.querySelector(".modes")?.addEventListener("click", (e) => {
-  const btn = e.target.closest(".mode");
+els.matchdayBar?.addEventListener("click", (e) => {
+  const btn = e.target.closest("[data-mode]");
   if (!btn || !btn.dataset.mode) return;
   setMatchMode(btn.dataset.mode);
 });
 
-els.matchSelect?.addEventListener("change", () => {
-  currentMatchId = els.matchSelect.value;
-  writeHash();
-  render();
+els.btnBackSeason?.addEventListener("click", () => {
+  seasonTab = "fixtures";
+  setScope("season");
 });
-
-els.btnNewMatch?.addEventListener("click", addNewMatch);
 
 window.addEventListener("hashchange", () => {
   if (applyingHash) return;
@@ -1647,7 +1675,7 @@ async function startApp() {
     if (!Array.isArray(season.players)) season.players = [];
     if (!Array.isArray(season.matches)) season.matches = [];
     season.quarterMinutes = getQuarterMinutes();
-    renderMatchSelect();
+    ensureCurrentMatch();
     updateShareChrome();
 
     if (!isSharedView() && needsOnboarding()) {
@@ -1656,6 +1684,7 @@ async function startApp() {
     } else if (location.hash && location.hash !== "#" && !location.hash.includes("setup")) {
       applyHash();
     } else {
+      seasonTab = "fixtures";
       setScope("season", { skipHash: true });
       writeHash();
     }
