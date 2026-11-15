@@ -318,18 +318,20 @@ function canEdit() {
 
 function updateShareChrome() {
   const shared = isSharedView();
+  const editable = canEdit();
   if (els.btnShare) els.btnShare.hidden = shared || !season;
   if (els.shareBanner) els.shareBanner.hidden = !shared;
   if (els.shareBannerText && shared) {
-    els.shareBannerText.textContent =
-      sharedSession.permission === "write"
-        ? "Viewing a shared team · You can edit"
-        : "Viewing a shared team · View only";
+    els.shareBannerText.textContent = editable
+      ? "Viewing a shared team · You can edit"
+      : "Viewing a shared team · View only";
   }
-  if (els.btnNewMatch) els.btnNewMatch.hidden = !canEdit();
+  if (els.btnNewMatch) els.btnNewMatch.hidden = !editable;
   const editTab = document.querySelector('.mode[data-mode="edit"]');
-  if (editTab) editTab.hidden = !canEdit();
-  document.body.classList.toggle("read-only", !canEdit());
+  if (editTab) editTab.hidden = !editable;
+  const setupBtn = document.getElementById("scope-setup");
+  if (setupBtn) setupBtn.hidden = !editable;
+  document.body.classList.toggle("read-only", !editable);
 }
 
 function markDirty() {
@@ -1291,6 +1293,7 @@ function applyHash() {
 }
 
 function setScope(next, { skipHash = false } = {}) {
+  if (next === "setup" && !canEdit()) next = "matchday";
   scope = next;
   els.scopeBtns.forEach((btn) => {
     btn.classList.toggle("active", btn.dataset.scope === scope);
