@@ -33,8 +33,8 @@
 
         <div class="header-end">
           <nav class="scope-nav" aria-label="Section">
-            <button type="button" class="scope-btn" data-scope="season" id="scope-season">Season</button>
-            <button type="button" class="scope-btn active" data-scope="matchday" id="scope-matchday">
+            <button type="button" class="scope-btn active" data-scope="season" id="scope-season">Season</button>
+            <button type="button" class="scope-btn" data-scope="matchday" id="scope-matchday">
               Matchday
             </button>
             <button type="button" class="scope-btn" data-scope="setup" id="scope-setup" title="Team setup">
@@ -54,7 +54,7 @@
           <button type="button" class="btn-link" id="btn-leave-share">Open my team</button>
         </div>
 
-        <div class="matchday-bar" id="matchday-bar">
+        <div class="matchday-bar" id="matchday-bar" hidden>
           <nav class="modes" role="tablist" aria-label="Match view">
             <button type="button" class="mode active" data-mode="match" role="tab" aria-selected="true">
               Match
@@ -78,8 +78,8 @@
 
       <main>
         <section id="view-setup" class="view" aria-label="Team setup" hidden></section>
-        <section id="view-season" class="view" aria-label="Season" hidden></section>
-        <section id="view-match" class="view active" aria-label="Match details"></section>
+        <section id="view-season" class="view active" aria-label="Season"></section>
+        <section id="view-match" class="view" aria-label="Match details" hidden></section>
         <section id="view-edit" class="view" aria-label="Edit match" hidden></section>
         <section id="view-teamsheet" class="view" aria-label="Teamsheet" hidden></section>
       </main>

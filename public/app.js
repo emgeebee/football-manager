@@ -65,7 +65,7 @@ const els = {
 };
 
 /** @type {"season" | "matchday" | "setup"} */
-let scope = "matchday";
+let scope = "season";
 /** match | edit | teamsheet — only used in matchday scope */
 let matchMode = "match";
 /** Skip writing hash while applying one from the URL */
@@ -441,15 +441,16 @@ function renderMatchView(match) {
 
   const venue = match.venue === "home" || match.venue === "away" ? match.venue : "";
   const future = isFutureMatch(match);
+  const heroResult = future ? "fixture" : res || "D";
   const scoreBlock = future
-    ? `<span class="badge D">Upcoming</span>`
+    ? `<span class="badge fixture">Upcoming</span>`
     : `<span class="score">${scoreText(match)}</span>
         <span class="badge ${res}">${res === "W" ? "Win" : res === "L" ? "Loss" : "Draw"}</span>`;
   const metaExtra = future
     ? ` · ${gameMinutes()} mins`
     : ` · HT ${ht.for}–${ht.against} · ${gameMinutes()} mins${match.ownGoals ? ` · ${match.ownGoals} OG` : ""}`;
   els.viewMatch.innerHTML = `
-    <div class="match-hero">
+    <div class="match-hero ${heroResult}">
       <h1>v ${escapeHtml(match.opponent || "TBC")}</h1>
       <div class="score-row">
         ${scoreBlock}
@@ -997,12 +998,12 @@ function renderSeason() {
             <div class="bbc-ft">FT<span class="bbc-date">${escapeHtml(formatDate(m.date))}${m.time ? ` · ${escapeHtml(m.time)}` : ""}</span></div>
           </div>`;
       return `
-        <article class="bbc-row ${res || "fixture"}">
+        <a class="bbc-row ${res || "fixture"}" href="#/matchday/match/${encodeURIComponent(m.id)}">
           <div class="bbc-home${sides.homeIsUs ? " us" : ""}">${escapeHtml(sides.home)}</div>
           ${scoreCentre}
           <div class="bbc-away${sides.awayIsUs ? " us" : ""}">${escapeHtml(sides.away)}</div>
           ${unset}
-        </article>`;
+        </a>`;
     })
     .join("");
 
@@ -1225,8 +1226,7 @@ function wireSetupHandlers() {
     clearError();
     season.setupComplete = true;
     markDirty();
-    setScope("matchday");
-    setMatchMode("match");
+    setScope("season");
   });
 }
 
@@ -1602,28 +1602,47 @@ function closeShareModal() {
   if (els.shareModal) els.shareModal.hidden = true;
 }
 
+function clearShareParamFromUrl() {
+  const url = new URL(window.location.href);
+  if (!url.searchParams.has(SHARE_PARAM)) return;
+  url.searchParams.delete(SHARE_PARAM);
+  history.replaceState(null, "", `${url.pathname}${url.search}${url.hash}`);
+}
+
+async function loadOwnSeason() {
+  sharedSession = null;
+  let loaded = await loadSeasonDoc();
+  if (!loaded) {
+    season = await fetchSeedSeason();
+    season.setupComplete = !!season.teamName && (season.players?.length || 0) >= 5;
+    dirty = true;
+    await saveSeasonDoc(season);
+    dirty = false;
+  } else {
+    season = loaded;
+  }
+}
+
 async function startApp() {
   if (appStarted) return;
   appStarted = true;
   try {
     clearError();
     const shareCode = readShareCode();
+    let shareWarning = null;
     if (shareCode) {
-      const loaded = await loadSharedSeason(shareCode);
-      sharedSession = { code: shareCode, permission: loaded.permission };
-      season = loaded.season;
-    } else {
-      sharedSession = null;
-      let loaded = await loadSeasonDoc();
-      if (!loaded) {
-        season = await fetchSeedSeason();
-        season.setupComplete = !!season.teamName && (season.players?.length || 0) >= 5;
-        dirty = true;
-        await saveSeasonDoc(season);
-        dirty = false;
-      } else {
-        season = loaded;
+      try {
+        const loaded = await loadSharedSeason(shareCode);
+        sharedSession = { code: shareCode, permission: loaded.permission };
+        season = loaded.season;
+      } catch (shareErr) {
+        // Drop a dead ?share= so refresh does not loop on the same 404.
+        clearShareParamFromUrl();
+        shareWarning = shareErr.message || String(shareErr);
+        await loadOwnSeason();
       }
+    } else {
+      await loadOwnSeason();
     }
     if (!Array.isArray(season.players)) season.players = [];
     if (!Array.isArray(season.matches)) season.matches = [];
@@ -1637,11 +1656,11 @@ async function startApp() {
     } else if (location.hash && location.hash !== "#" && !location.hash.includes("setup")) {
       applyHash();
     } else {
-      setScope("matchday", { skipHash: true });
-      setMatchMode("match", { skipHash: true });
+      setScope("season", { skipHash: true });
       writeHash();
     }
     if (dirty) scheduleSave();
+    if (shareWarning) showError(shareWarning);
   } catch (err) {
     appStarted = false;
     showError(err.message || String(err));

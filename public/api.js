@@ -108,7 +108,13 @@ export async function setShareAccess(code, userId, permission) {
 /** Open a shared season. Returns `{ permission, season }`. */
 export async function loadSharedSeason(code) {
   const res = await request(`/shared/${encodeURIComponent(code)}`);
-  if (res.status === 404) throw new Error("This share link has expired or been revoked.");
+  if (res.status === 404) {
+    const detail = await errorMessage(res, "");
+    if (detail && /no longer available/i.test(detail)) {
+      throw new Error("This shared team is no longer available.");
+    }
+    throw new Error("This share link has expired or been revoked.");
+  }
   const data = await json(res, "Could not open the shared team");
   const season = seasonFromDoc(data.doc);
   if (!season) throw new Error("This share link is not a football season.");
